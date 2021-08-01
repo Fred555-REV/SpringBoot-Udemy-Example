@@ -1,6 +1,10 @@
 package com.udemy.example.users;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -29,13 +33,16 @@ public class UserDaoController {
     }
 
     @GetMapping(path = "users/{id}")
-    public User getUser(@PathVariable Integer id) {
+    public EntityModel<User> getUser(@PathVariable Integer id) {
 
         User user = this.userDaoService.getUser(id);
         if (user == null) {
             throw new UserNotFoundException("id-" + id);
         }
-        return user;
+        EntityModel<User> model = EntityModel.of(user);
+        WebMvcLinkBuilder linkToUser = linkTo(methodOn(this.getClass()).getUsers());
+        model.add(linkToUser.withRel("all-users"));
+        return model;
     }
 
     @DeleteMapping(path = "users/{id}")
