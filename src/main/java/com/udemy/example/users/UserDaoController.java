@@ -28,7 +28,6 @@ public class UserDaoController {
 
     @GetMapping(path = "users")
     public List<User> getUsers() {
-        System.out.println("What is up fellow kids.");
         return this.userDaoService.getUsers();
     }
 
