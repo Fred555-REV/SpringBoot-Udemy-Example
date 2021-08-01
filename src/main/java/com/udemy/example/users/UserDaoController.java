@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.time.LocalDate;
@@ -39,7 +40,11 @@ public class UserDaoController {
 
     @DeleteMapping(path = "users/{id}")
     public void deleteUser(@PathVariable Integer id) {
-        this.userDaoService.deleteUser(id);
+        User deletedUser = this.userDaoService.deleteUser(id);
+
+        if (deletedUser == null) {
+            throw new UserNotFoundException("id-" + id);
+        }
     }
 
     //    @PostMapping(path = "users")
@@ -54,7 +59,7 @@ public class UserDaoController {
 //        return ResponseEntity.created(location).build();
 //    }
     @PostMapping(path = "users")
-    public ResponseEntity<Object> createUser(@RequestBody User user) {
+    public ResponseEntity<Object> createUser(@Valid @RequestBody User user) {
         User newUser = this.userDaoService.createUser(user);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

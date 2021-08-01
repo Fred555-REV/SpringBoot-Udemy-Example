@@ -65,8 +65,15 @@ public class UserDaoService {
         return user;
     }
 
-    public void deleteUser(Integer id) {
-        users.removeIf(user -> user.getID() == id);
-        removeId(id);
+    public User deleteUser(Integer id) {
+//        users.removeIf(user -> user.getID() == id);
+        for (User user : users) {
+            if (user.getID() == id) {
+                users.remove(user);
+                removeId(id);
+                return user;
+            }
+        }
+        return null;
     }
 }
