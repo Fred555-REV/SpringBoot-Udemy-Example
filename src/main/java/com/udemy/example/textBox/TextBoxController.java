@@ -1,15 +1,20 @@
 package com.udemy.example.textBox;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Locale;
 
 @RestController
 @RequestMapping(path = "text")
 public class TextBoxController {
+    @Autowired
+    private MessageSource messageSource;
+
     private TextBoxService textBoxService;
 
     @Autowired
@@ -29,6 +34,19 @@ public class TextBoxController {
     @GetMapping
     public String displayText() {
         return this.textBoxService.displayText();
+    }
+
+    @GetMapping(path = "/international/good-morning")
+    public String displayInternationalText(
+            @RequestHeader(name = "Accept-Language", required = false)
+                    Locale locale) {
+
+        return messageSource.getMessage(
+                "good.morning.message",
+                null,
+                "Good Morning",
+                locale);
+//        return this.textBoxService.displayText();
     }
 
     @DeleteMapping
