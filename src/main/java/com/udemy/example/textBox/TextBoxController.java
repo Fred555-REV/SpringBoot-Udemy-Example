@@ -2,8 +2,10 @@ package com.udemy.example.textBox;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleContextResolver;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -37,15 +39,14 @@ public class TextBoxController {
     }
 
     @GetMapping(path = "/international/good-morning")
-    public String displayInternationalText(
-            @RequestHeader(name = "Accept-Language", required = false)
-                    Locale locale) {
+    public String displayInternationalText() {
+//            @RequestHeader(name = "Accept-Language", required = false) Locale locale){
 
         return messageSource.getMessage(
                 "good.morning.message",
                 null,
                 "Good Morning",
-                locale);
+                LocaleContextHolder.getLocale());
 //        return this.textBoxService.displayText();
     }
 
